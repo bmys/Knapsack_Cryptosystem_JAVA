@@ -27,19 +27,35 @@ public class BigInt {
         this.size = arr.size();
     }
 
-    BigInt(List<Boolean> arr, boolean sign){
+    private BigInt(List<Boolean> arr, boolean sign){
         this.arr = arr;
         this.sign = sign;
     }
 
     public BigInt add(BigInt other){
+
+        // (this = negative, other = positive)
+        if(sign && !other.isSign()){
+            return other.sub(this);
+        }
+
+        // (this = positive, other = negative)
+        if(!sign && other.isSign()){
+            return sub(other);
+        }
+
+        // (this = positive, other = positive) or (this = negative, other = negative)
+        Boolean newSign = sign && other.isSign();
+
         List<Boolean> res = new LinkedList<>();
 
+        // get longest array size
         long newSize = (this.size > other.getSize()) ? this.size : other.getSize();
 
         boolean carry = false;
 
         for (int i = 0; i < newSize; i++) {
+            // if index out of range it returns false, no padding handling
             boolean a = getEl(i);
             boolean b = other.getEl(i);
 
@@ -78,16 +94,24 @@ public class BigInt {
                     // carry not changed, still false.
                 }
             }
-
+            // if carry left after addition
             if(carry){
                 res.add(true);
             }
         }
 
-        return new BigInt(res, true);
+        return new BigInt(res, newSign);
     }
-    
-    public long getSize() {
+
+    public BigInt sub(BigInt other){
+        List<Boolean> res = new LinkedList<>();
+        // TODO: implement
+        return new BigInt(res, true);
+
+    }
+
+
+        public long getSize() {
         return size;
     }
 
