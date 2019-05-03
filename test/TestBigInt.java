@@ -49,4 +49,53 @@ public class TestBigInt {
         assertEquals(bigInt.getArr(), testArr);
         assertEquals(bigInt.getArr().size(), 4);
     }
+
+    @Test
+    public void testSum() {
+        BigInt a = new BigInt(0);
+        BigInt b = new BigInt(0);
+        BigInt c = a.add(b);
+        assertEquals( "0", c.toString());
+
+        a = new BigInt(1);
+        b = new BigInt(0);
+        c = a.add(b);
+        assertEquals("1", c.toString());
+
+        a = new BigInt(1);
+        b = new BigInt(1);
+        c = a.add(b);
+        assertEquals("2", c.toString());
+
+        a = new BigInt(1);
+        b = new BigInt(2);
+        c = a.add(b);
+        assertEquals("3", c.toString());
+
+        a = new BigInt(2);
+        b = new BigInt(5);
+        c = a.add(b);
+        assertEquals("7", c.toString());
+
+        a = new BigInt(5);
+        b = new BigInt(5);
+        c = a.add(b);
+        assertEquals("10", c.toString());
+
+        a = new BigInt(12);
+        b = new BigInt(5);
+        c = a.add(b);
+        assertEquals("17", c.toString());
+
+         a = new BigInt(15);
+         b = new BigInt(15);
+         c = a.add(b);
+        assertEquals("30", c.toString());
+
+        a = new BigInt(-15);
+        b = new BigInt(-15);
+        c = a.add(b);
+        assertEquals("-30", c.toString());
+
+    }
 }
