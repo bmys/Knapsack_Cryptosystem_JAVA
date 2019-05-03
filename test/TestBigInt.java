@@ -136,5 +136,26 @@ public class TestBigInt {
         b = new BigInt(3);
         c = a.sub(b);
         assertEquals("11", c.toString());
+
+        a = new BigInt(32);
+        b = new BigInt(31);
+        c = a.sub(b);
+        assertEquals("1", c.toString());
+
+        a = new BigInt(-15);
+        b = new BigInt(-15);
+        c = a.sub(b);
+        assertEquals("0", c.toString());
+
+        a = new BigInt(-15);
+        b = new BigInt(15);
+        c = a.sub(b);
+        assertEquals("-30", c.toString());
+
+        a = new BigInt(9);
+        b = new BigInt(-8);
+        c = a.sub(b);
+        assertEquals("17", c.toString());
+
     }
 }

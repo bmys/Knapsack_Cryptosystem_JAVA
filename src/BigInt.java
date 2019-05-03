@@ -129,7 +129,9 @@ public class BigInt {
 
       // (this = negative, other = positive) : -1 - 2 = -1 + (-2)
       if (sign && !other.isSign()) {
-          return add(other);
+          BigInt newOther = new BigInt(other);
+          newOther.setSign(true);
+          return add(newOther);
       }
 
       // not sure if this is necessary
