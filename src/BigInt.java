@@ -37,6 +37,7 @@ public class BigInt {
   private BigInt(BigInt other) {
         this.arr = other.arr;
         this.sign = other.sign;
+        this.size = this.arr.size();
     }
 
   public BigInt add(BigInt other) {
@@ -159,7 +160,7 @@ public class BigInt {
 
       // (1, 0)
       else if(a && !b){
-          res.add(false);
+          res.add(true);
       }
 
       // (1, 1)
@@ -175,7 +176,8 @@ public class BigInt {
 
           else{
               // borrow
-              int idx = min.arr.subList(i, min.arr.size()).indexOf(true);
+              List k = min.arr.subList(i, min.arr.size());
+              int idx = k.indexOf(true) + i;
 
               if(idx == -1){
                   return cutFillAndChangeSign(i, other);
@@ -195,7 +197,7 @@ public class BigInt {
     }
 
     // TODO: implement
-    return new BigInt(res, true);
+    return new BigInt(res, false);
   }
 
   private BigInt cutFillAndChangeSign(int i, BigInt num){
@@ -212,7 +214,7 @@ public class BigInt {
 
       List<Boolean> newArr = new LinkedList<>(Arrays.asList(padding));
 
-      newArr.addAll(num.arr.subList(i, arr.size()-1));
+      newArr.addAll(num.arr.subList(i, arr.size()));
 
       return new BigInt(newArr, true);
   }

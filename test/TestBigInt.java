@@ -96,6 +96,45 @@ public class TestBigInt {
         b = new BigInt(-15);
         c = a.add(b);
         assertEquals("-30", c.toString());
+    }
 
+    @Test
+    public void testSub() {
+        BigInt a, b, c;
+
+        a = new BigInt(15);
+        b = new BigInt(5);
+        c = a.sub(b);
+        assertEquals("10", c.toString());
+
+        a = new BigInt(8);
+        b = new BigInt(1);
+        c = a.sub(b);
+        assertEquals("7", c.toString());
+
+        a = new BigInt(12);
+        b = new BigInt(3);
+        c = a.sub(b);
+        assertEquals("9", c.toString());
+
+        a = new BigInt(32);
+        b = new BigInt(11);
+        c = a.sub(b);
+        assertEquals("21", c.toString());
+
+        a = new BigInt(5);
+        b = new BigInt(5);
+        c = a.sub(b);
+        assertEquals("0", c.toString());
+
+        a = new BigInt(5);
+        b = new BigInt(4);
+        c = a.sub(b);
+        assertEquals("1", c.toString());
+
+        a = new BigInt(14);
+        b = new BigInt(3);
+        c = a.sub(b);
+        assertEquals("11", c.toString());
     }
 }
