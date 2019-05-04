@@ -1,5 +1,6 @@
 import org.testng.annotations.Test;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -171,8 +172,13 @@ public class TestBigInt {
     @Test
     public void testLeftShift() {
         BigInt a = new BigInt(6);
-
         assertEquals("12", a.shiftLeft(1).toString());
+
+        a = new BigInt(12);
+        assertEquals("192", a.shiftLeft(4).toString());
+
+
+
     }
 
     @Test
@@ -186,4 +192,58 @@ public class TestBigInt {
         a = new BigInt(7);
         assertEquals("0", a.shiftRight(3).toString());
     }
+
+    @Test
+    public void testMul() {
+        BigInt mx, my;
+        BigInteger x, y;
+
+        mx = new BigInt(1234);
+        x = new BigInteger("1234");
+
+
+//        Karatsuba.main(new String[]{"120", "120"});
+
+        BigInt a = new BigInt(123);
+        BigInt b = new BigInt(456);
+    assertEquals("56088", BigInt.mul(a, b).toString());
+
+//         a = new BigInt(1234);
+//         b = new BigInt(4321);
+//    assertEquals("5332114", a.mul(b).toString());
+//
+        a = new BigInt(12345);
+        b = new BigInt(54321);
+    assertEquals("670592745", BigInt.mul(a, b).toString());
+
+//        a = new BigInt(67059);
+//        b = new BigInt(67059);
+//    assertEquals("4496909481", a.mul(b).toString());
+
+
+        int N = Math.max(x.bitLength(), x.bitLength());
+        int mN = Math.max(mx.getSize(), mx.getSize());
+        assertEquals(N, mN);
+
+//        // number of bits divided by 2, rounded up
+//        N = (N / 2) + (N % 2);
+//
+//        // x = a + 2^N b,   y = c + 2^N d
+//        BigInteger b = x.shiftRight(N);
+//        BigInt mb = mx.shiftRight(N);
+//        assertEquals(b.longValue(), Long.parseLong(mb.toString()));
+//
+//        BigInteger inner = b.shiftLeft(N);
+//        BigInt minner = mb.shiftLeft(N);
+//        assertEquals(inner.longValue(), Long.parseLong(minner.toString()));
+//
+//
+//        BigInteger a = x.subtract(inner);
+//        BigInt ma = mx.sub(minner);
+//        assertEquals(a.longValue(), Long.parseLong(ma.toString()));
+
+
+//        BigInteger d = y.shiftRight(N);
+    }
+
     }

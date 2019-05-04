@@ -200,13 +200,37 @@ public class BigInt {
     }
 
     // TODO: add negative result. example: a < b => a - b = -c
+      res = res.subList(0, res.lastIndexOf(true)+1);
     return new BigInt(res, false);
   }
 
-  public BigInt mul(BigInt other){
-      List<Boolean> res = new LinkedList<>();
+  public BigInt naiveMul(BigInt other) {
+      // TODO: implement
+      return new BigInt(5);
+  }
 
-      return new BigInt(res, false);
+  public static BigInt mul(BigInt first, BigInt other){
+      int N = Math.max(first.size, other.size);
+      if (N <= 4){
+          long number = Long.parseLong(first.toString()) * Long.parseLong(other.toString());
+          return new BigInt(number);
+      }
+
+      // number of bits divided by 2, rounded up
+      N = (N / 2) + (N % 2);
+
+      // x = a + 2^N b,   y = c + 2^N d
+      BigInt b = first.shiftRight(N);
+      BigInt a = first.sub(b.shiftLeft(N));
+      BigInt d = other.shiftRight(N);
+      BigInt c = other.sub(d.shiftLeft(N));
+
+      // compute sub-expressions
+      BigInt ac    = mul(a, c);
+      BigInt bd    = mul(b, d);
+      BigInt abcd  = mul(a.add(b), c.add(d));
+
+      return ac.add(abcd.sub(ac).sub(bd).shiftLeft(N)).add(bd.shiftLeft(2*N));
   }
 
   private BigInt cutFillAndChangeSign(int i, BigInt num){
@@ -238,22 +262,22 @@ public class BigInt {
       return new BigInt(narr, this.sign);
   }
 
-    public BigInt shiftRight(int bits){
+  public BigInt shiftRight(int bits){
         List<Boolean> narr = new LinkedList<>();
 
-        if(bits > size){
+        if(bits >= size){
             return new BigInt(0);
         }
 
-        Boolean[] padding = new Boolean[bits];
-        Arrays.fill(padding, Boolean.FALSE);
-        narr.addAll(this.arr.subList(padding.length, arr.size()));
-        narr.addAll(Arrays.asList(padding));
+//        Boolean[] padding = new Boolean[bits];
+//        Arrays.fill(padding, Boolean.FALSE);
+//        narr.addAll(this.arr.subList(padding.length, arr.size()));
+//        narr.addAll(Arrays.asList(padding));
+        narr.addAll(this.arr.subList(bits, arr.size()));
         return new BigInt(narr, this.sign);
     }
 
-
-    private long getSize() {
+  public int getSize() {
     return size;
   }
 
@@ -261,11 +285,11 @@ public class BigInt {
     return arr;
   }
 
-    public void setSign(boolean sign) {
+  private void setSign(boolean sign) {
         this.sign = sign;
-    }
+  }
 
-    public boolean isSign() {
+  public boolean isSign() {
     return sign;
   }
 
@@ -293,7 +317,6 @@ public class BigInt {
           arr.set(i, value);
       }
     }
-
 
   @Override
   public String toString() {
