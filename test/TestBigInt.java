@@ -157,5 +157,33 @@ public class TestBigInt {
         c = a.sub(b);
         assertEquals("17", c.toString());
 
+        a = new BigInt(0);
+        b = new BigInt(-8);
+        c = a.sub(b);
+        assertEquals("8", c.toString());
+
+//        a = new BigInt(5);
+//        b = new BigInt(15);
+//        c = a.sub(b);
+//        assertEquals("-10", c.toString());
     }
-}
+
+    @Test
+    public void testLeftShift() {
+        BigInt a = new BigInt(6);
+
+        assertEquals("12", a.shiftLeft(1).toString());
+    }
+
+    @Test
+    public void testRightShift() {
+        BigInt a = new BigInt(12);
+        assertEquals("6", a.shiftRight(1).toString());
+
+        a = new BigInt(5);
+        assertEquals("0", a.shiftRight(10).toString());
+
+        a = new BigInt(7);
+        assertEquals("0", a.shiftRight(3).toString());
+    }
+    }

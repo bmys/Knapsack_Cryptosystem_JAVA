@@ -31,6 +31,7 @@ public class BigInt {
 
   private BigInt(List<Boolean> arr, boolean sign) {
     this.arr = arr;
+    this.size = this.arr.size();
     this.sign = sign;
   }
 
@@ -198,11 +199,18 @@ public class BigInt {
       }
     }
 
-    // TODO: implement
+    // TODO: add negative result. example: a < b => a - b = -c
     return new BigInt(res, false);
   }
 
+  public BigInt mul(BigInt other){
+      List<Boolean> res = new LinkedList<>();
+
+      return new BigInt(res, false);
+  }
+
   private BigInt cutFillAndChangeSign(int i, BigInt num){
+      // not working don.t use it.
         /*
           example: 5 - 18 => 0 - 13 = -13
           if borrow needed and size of minuend reached
@@ -216,12 +224,36 @@ public class BigInt {
 
       List<Boolean> newArr = new LinkedList<>(Arrays.asList(padding));
 
-      newArr.addAll(num.arr.subList(i, arr.size()));
+      newArr.addAll(num.arr.subList(newArr.size(), num.arr.size()));
 
       return new BigInt(newArr, true);
   }
 
-  private long getSize() {
+  public BigInt shiftLeft(int bits){
+      List<Boolean> narr = new LinkedList<>();
+      Boolean[] padding = new Boolean[bits];
+      Arrays.fill(padding, Boolean.FALSE);
+      narr.addAll(Arrays.asList(padding));
+      narr.addAll(this.arr);
+      return new BigInt(narr, this.sign);
+  }
+
+    public BigInt shiftRight(int bits){
+        List<Boolean> narr = new LinkedList<>();
+
+        if(bits > size){
+            return new BigInt(0);
+        }
+
+        Boolean[] padding = new Boolean[bits];
+        Arrays.fill(padding, Boolean.FALSE);
+        narr.addAll(this.arr.subList(padding.length, arr.size()));
+        narr.addAll(Arrays.asList(padding));
+        return new BigInt(narr, this.sign);
+    }
+
+
+    private long getSize() {
     return size;
   }
 
