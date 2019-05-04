@@ -277,6 +277,36 @@ public class BigInt {
         return new BigInt(narr, this.sign);
     }
 
+    private static int lastTrue(BigInt bigInt){
+      return bigInt.arr.lastIndexOf(true);
+    }
+
+    public boolean gt(BigInt other){
+      // no sign support yet
+        return lastTrue(this) > lastTrue(other);
+    }
+
+    public boolean lt(BigInt other){
+        // no sign support yet
+        return !gt(other);
+    }
+
+    public boolean geot(BigInt other){
+        // no sign support yet
+        return lastTrue(this) >= lastTrue(other);
+    }
+
+    public boolean leot(BigInt other){
+        // no sign support yet
+        return !geot(other);
+    }
+
+    public boolean eq(BigInt other){
+        String res = sub(other).toString();
+        return res.equals("0");
+    }
+
+
   public int getSize() {
     return size;
   }
@@ -327,6 +357,8 @@ public class BigInt {
       if (bln) res += num;
       num *= 2;
     }
+//    sometimes return -0 temporary fix
+      if(res == 0) return "0";
 
     String si = sign ? "-" : "";
     return si + res;

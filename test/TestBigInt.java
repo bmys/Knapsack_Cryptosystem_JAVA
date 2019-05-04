@@ -246,4 +246,76 @@ public class TestBigInt {
 //        BigInteger d = y.shiftRight(N);
     }
 
+    @Test
+    public void TestGreaterThan(){
+        BigInt x, y;
+
+        x = new BigInt(100);
+        y = new BigInt(50);
+        assertEquals(true, x.gt(y));
+
+        assertEquals(false, y.gt(x));
+    }
+
+    @Test
+    public void TestLessThan(){
+        BigInt x, y;
+
+        x = new BigInt(100);
+        y = new BigInt(50);
+        assertEquals(false, x.lt(y));
+
+        assertEquals(true, y.lt(x));
+    }
+
+    @Test
+    public void TestEqual(){
+        BigInt x, y;
+
+        x = new BigInt(100);
+        y = new BigInt(50);
+        assertEquals(false, x.eq(y));
+
+        // after previous test x = 0. check why it's happen
+        x = new BigInt(100);
+        y = new BigInt(100);
+        assertEquals(true, x.eq(y));
+    }
+
+    @Test
+    public void TestGreaterOrEqual(){
+        BigInt x, y;
+
+        x = new BigInt(50);
+        y = new BigInt(100);
+        assertEquals(false, x.geot(y));
+
+        // after previous test x = 0. check why it's happen
+        x = new BigInt(100);
+        y = new BigInt(50);
+        assertEquals(true, x.geot(y));
+
+        x = new BigInt(100);
+        y = new BigInt(100);
+        assertEquals(true, x.geot(y));
+    }
+
+    @Test
+    public void TestLessOrEqual(){
+        BigInt x, y;
+
+        x = new BigInt(50);
+        y = new BigInt(100);
+        assertEquals(true, x.leot(y));
+
+        // after previous test x = 0. check why it's happen
+        x = new BigInt(100);
+        y = new BigInt(50);
+        assertEquals(false, x.leot(y));
+
+        x = new BigInt(100);
+        y = new BigInt(100);
+        assertEquals(false, x.leot(y));
+    }
+
     }
