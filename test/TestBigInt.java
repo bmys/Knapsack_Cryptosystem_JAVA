@@ -216,9 +216,9 @@ public class TestBigInt {
         b = new BigInt(54321);
     assertEquals("670592745", BigInt.mul(a, b).toString());
 
-//        a = new BigInt(67059);
-//        b = new BigInt(67059);
-//    assertEquals("4496909481", a.mul(b).toString());
+        a = new BigInt(67059);
+        b = new BigInt(67059);
+    assertEquals("4496909481", BigInt.mul(a, b).toString());
 
 
         int N = Math.max(x.bitLength(), x.bitLength());
