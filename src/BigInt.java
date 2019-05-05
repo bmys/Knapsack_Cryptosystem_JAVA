@@ -363,8 +363,8 @@ public class BigInt {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BigInt bigInt = (BigInt) o;
+        // delete size check size ||     == bigInt.size &&
         return sign == bigInt.sign &&
-                size == bigInt.size &&
                 Objects.equals(arr, bigInt.arr);
     }
 
