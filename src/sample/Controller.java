@@ -9,6 +9,8 @@ import Knapsack.BigInt;
 
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,11 +27,36 @@ public class Controller {
         fileChooser.setTitle("Wybierz plik");
     }
 
+    private List<BigInt> createListFromString(String str){
+        str = str.replace("[", "");
+        str = str.replace("]", "");
+        List<String> numbers = Arrays.asList(str.split("\\s*,\\s*"));
+        List<BigInt> result = new LinkedList<>();
+
+        for (String num : numbers ) {
+            try{
+                long bigInt = Long.parseLong(num);
+                result.add(new BigInt(bigInt));
+            }
+            catch (NumberFormatException e){
+                System.out.println("Niepoprawna liczba");
+                return null;
+            }
+        }
+        return result;
+    }
+
     @FXML
     private Button decryptTextButton;
 
     @FXML
     private Label fileNameLabel;
+
+    @FXML
+    private TextField mText;
+
+    @FXML
+    private TextField nText;
 
     @FXML
     private TextField decryptNameLabel;
@@ -79,10 +106,10 @@ public class Controller {
     }
 
     public void generatePrivate(){
-        TextInputDialog dialog = new TextInputDialog("walter");
-        dialog.setTitle("Text Input Dialog");
-        dialog.setHeaderText("Look, a Text Input Dialog");
-        dialog.setContentText("Please enter your name:");
+        TextInputDialog dialog = new TextInputDialog("15");
+        dialog.setTitle("Podaj ilość elementów klucza");
+        dialog.setHeaderText("Podaj:");
+        dialog.setContentText("Ile");
 
         // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
@@ -101,5 +128,43 @@ public class Controller {
         }
     }
 
+    public void generatePublic(){
+        if(mText.getText().trim().isEmpty()){
+            System.out.println("Brak parametru M");
+            return;
+        }
 
+        if(nText.getText().trim().isEmpty()){
+            System.out.println("Brak parametru N");
+            return;
+        }
+
+        if(privateKeyText.getText().trim().isEmpty()){
+            System.out.println("Klucz prywatny pusty");
+            return;
+        }
+
+        if(createListFromString(privateKeyText.getText()) == null){
+            return;
+        }
+        privateKey = createListFromString(privateKeyText.getText());
+
+        try{
+            BigInt m = new BigInt(Long.parseLong(mText.getText()));
+            BigInt n = new BigInt(Long.parseLong(nText.getText()));
+            publicKey = Knapsack.createPublicKey(privateKey, n, m);
+        }
+
+        catch (NumberFormatException e){
+            System.out.println("Błędny parametr M lub N");
+            return;
+        }
+
+        catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        publicKeyText.setText(publicKey.toString());
+    }
 }
