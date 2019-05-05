@@ -1,9 +1,10 @@
+import Knapsack.Knapsack;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
+import Knapsack.BigInt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestKnapsack {

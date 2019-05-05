@@ -11,7 +11,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="422.0" prefWidth="797.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="422.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -26,35 +26,35 @@
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
          <children>
             <Label text="Tekst jawny" />
-            <TextArea prefHeight="200.0" prefWidth="200.0" />
+            <TextArea fx:id="plainTextArea" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </VBox>
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <children>
             <Label text="Tekst zaszyfrowany" />
-            <TextArea prefHeight="200.0" prefWidth="200.0" />
+            <TextArea fx:id="cipherTextArea" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </VBox>
-      <Button mnemonicParsing="false" text="Szyfruj" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-      <Button mnemonicParsing="false" text="Odszyfruj" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+      <Button fx:id="encryptTextButton" mnemonicParsing="false" text="Szyfruj" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+      <Button fx:id="decryptTextButton" mnemonicParsing="false" text="Odszyfruj" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
       <VBox GridPane.rowIndex="1">
          <children>
-            <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Generuj klucz prywatny">
+            <Button fx:id="generatePrivateButton" onAction="#generatePrivate" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Generuj klucz prywatny">
                <VBox.margin>
                   <Insets left="5.0" right="5.0" />
                </VBox.margin>
             </Button>
-            <TextField />
+            <TextField fx:id="privateKeyText" />
          </children>
       </VBox>
       <VBox layoutX="10.0" layoutY="171.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
-            <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Generuj klucz publiczny">
+            <Button fx:id="generatePublicButton" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Generuj klucz publiczny">
                <VBox.margin>
                   <Insets left="5.0" right="5.0" />
                </VBox.margin>
             </Button>
-            <TextField />
+            <TextField fx:id="publicKeyText" />
          </children>
       </VBox>
       <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
@@ -66,8 +66,8 @@
          <children>
             <HBox prefHeight="12.0" prefWidth="295.0">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Wybierz plik" />
-                  <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" text="Nie wybrano pliku">
+                  <Button fx:id="chooseFileButton" onAction="#chooseFile" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Wybierz plik" />
+                  <Label fx:id="fileNameLabel" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" text="Nie wybrano pliku">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
@@ -76,12 +76,12 @@
             </HBox>
             <HBox prefHeight="21.0" prefWidth="394.0">
                <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Szyfruj plik">
+                  <Button fx:id="cryptFileButton" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Szyfruj plik">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
                   </Button>
-                  <TextField maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="25.0" prefWidth="252.0" text="Nowa nazwa">
+                  <TextField fx:id="cryptNameLabel" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="25.0" prefWidth="252.0" text="Nowa nazwa">
                      <HBox.margin>
                         <Insets left="5.0" top="5.0" />
                      </HBox.margin>
@@ -90,8 +90,8 @@
             </HBox>
             <HBox layoutX="10.0" layoutY="10.0" prefHeight="12.0" prefWidth="295.0">
                <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Odszyfruj plik" />
-                  <TextField maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="252.0" text="Nowa nazwa">
+                  <Button fx:id="decryptFileButton" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Odszyfruj plik" />
+                  <TextField fx:id="decryptNameLabel" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="252.0" text="Nowa nazwa">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>
