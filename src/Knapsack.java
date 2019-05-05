@@ -37,5 +37,18 @@ public class Knapsack {
         return sequence;
     }
 
+    public static BigInt inverseMod(BigInt n, BigInt m){
+        BigInt i = new BigInt(1);
+        BigInt one = new BigInt(1);
 
+        while(true){
+            BigInt value = BigInt.mul(n, i).mod(m);
+            if(value.eq(one)){
+                return i;
+            }
+            else{
+                i = i.inc();
+            }
+        }
+    }
 }

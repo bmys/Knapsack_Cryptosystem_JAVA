@@ -31,4 +31,11 @@ public class TestKnapsack {
 // somewhere false is most significant bit!
         assertEquals(true, publicKey.toString().equals(expected.toString()));
     }
+
+    @Test
+    public void testInverseMod(){
+        BigInt invMod = Knapsack.inverseMod(new BigInt(53), new BigInt(120));
+        assertEquals(true, invMod.toString().equals(new BigInt(77).toString()));
+    }
+
 }
