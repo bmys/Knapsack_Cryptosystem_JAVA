@@ -51,4 +51,20 @@ public class Knapsack {
             }
         }
     }
+
+    public static BigInt toCipher(String msg, List<BigInt> publicKey){
+        BigInt sum = new BigInt(0);
+        int i =0;
+        for(char ch: msg.toCharArray()){
+            if(ch == '1'){
+                sum = sum.add(publicKey.get(i));
+            }
+            i++;
+        }
+        return sum;
+    }
+
+    public static BigInt toPlain(BigInt cipher, BigInt n, BigInt m){
+        return BigInt.mul(cipher, n).mod(m);
+    }
 }
