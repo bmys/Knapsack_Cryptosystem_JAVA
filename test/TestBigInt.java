@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TestBigInt {
 
@@ -216,10 +217,15 @@ public class TestBigInt {
         b = new BigInt(54321);
     assertEquals("670592745", BigInt.mul(a, b).toString());
 
-        a = new BigInt(67059);
-        b = new BigInt(67059);
-    assertEquals("4496909481", BigInt.mul(a, b).toString());
+    // this tests pass but comment for time saving
 
+//        a = new BigInt(67059);
+//        b = new BigInt(67059);
+//    assertEquals("4496909481", BigInt.mul(a, b).toString());
+//
+//        a = new BigInt(56525651);
+//        b = new BigInt(5612);
+//        assertEquals("317221953412", BigInt.mul(a, b).toString());
 
         int N = Math.max(x.bitLength(), x.bitLength());
         int mN = Math.max(mx.getSize(), mx.getSize());
@@ -316,6 +322,60 @@ public class TestBigInt {
         x = new BigInt(100);
         y = new BigInt(100);
         assertEquals(false, x.leot(y));
+    }
+
+    @Test
+    public void TestDivide(){
+        BigInt x, y;
+
+        x = new BigInt(100);
+        y = new BigInt(50);
+        assertEquals(new BigInt(2), x.div(y));
+
+        x = new BigInt(200);
+        y = new BigInt(50);
+        assertEquals(new BigInt(4), x.div(y));
+
+        x = new BigInt(16);
+        y = new BigInt(5);
+        assertEquals(new BigInt(3), x.div(y));
+
+        x = new BigInt(2);
+        y = new BigInt(5);
+        assertEquals(new BigInt(0), x.div(y));
+
+        x = new BigInt(9);
+        y = new BigInt(3);
+        assertEquals(new BigInt(3), x.div(y));
+
+        x = new BigInt(100);
+        y = new BigInt(51);
+        assertEquals(new BigInt(1), x.div(y));
+    }
+
+    @Test
+    public void TestMod(){
+        BigInt x, y;
+        x = new BigInt(100);
+        y = new BigInt(51);
+        assertEquals(new BigInt(49), x.mod(y));
+
+        x = new BigInt(10);
+        y = new BigInt(20);
+        assertEquals(new BigInt(10), x.mod(y));
+        boolean cached = false;
+        try{
+            x = new BigInt(10);
+            y = new BigInt(0);
+            assertEquals(new BigInt(10), x.mod(y));
+        }
+        catch (Exception IllegalArgumentException){
+            cached = true;
+        }
+
+        finally{
+            assertEquals(true, cached);
+        }
     }
 
     }

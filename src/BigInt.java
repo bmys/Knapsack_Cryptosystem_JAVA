@@ -1,6 +1,7 @@
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class BigInt {
@@ -174,7 +175,10 @@ public class BigInt {
       // (0, 1)
       else{
           if(i >= size){
-              return cutFillAndChangeSign(i, other);
+//              return cutFillAndChangeSign(i, other);
+              BigInt overFlow = new BigInt(other).sub(new BigInt(other));
+              overFlow.setSign(true);
+              return overFlow;
           }
 
           else{
@@ -183,7 +187,10 @@ public class BigInt {
               int idx = k.indexOf(true) + i;
 
               if(idx == -1){
-                  return cutFillAndChangeSign(i, other);
+//                  return cutFillAndChangeSign(i, other);
+                  BigInt overFlow = new BigInt(other).sub(new BigInt(other));
+                  overFlow.setSign(true);
+                  return overFlow;
               }
               // 10 - 01 = 1
               res.add(true);
@@ -231,6 +238,42 @@ public class BigInt {
       BigInt abcd  = mul(a.add(b), c.add(d));
 
       return ac.add(abcd.sub(ac).sub(bd).shiftLeft(N)).add(bd.shiftLeft(2*N));
+  }
+
+  public BigInt div(BigInt other){
+      return divide(other, false);
+  }
+
+  public BigInt mod(BigInt other){
+        return divide(other, true);
+    }
+
+  private BigInt divide(BigInt other, boolean mod){
+
+      if(other.toString().equals("0")){
+          throw new IllegalArgumentException("Zero Division!");
+      }
+
+      // if other larger
+      if(this.lt(other)){
+          if(mod) return new BigInt(this);
+          else return new BigInt(0);
+      }
+
+      // zero
+      BigInt counter = new BigInt(0);
+
+      BigInt dividend = new BigInt(this);
+      BigInt divider = new BigInt(other);
+
+      while(dividend.geot(divider)){
+          dividend = dividend.sub(divider);
+          counter = counter.inc();
+      }
+
+      if(mod) return dividend;
+
+      return counter;
   }
 
   private BigInt cutFillAndChangeSign(int i, BigInt num){
@@ -283,7 +326,21 @@ public class BigInt {
 
     public boolean gt(BigInt other){
       // no sign support yet
-        return lastTrue(this) > lastTrue(other);
+
+        if(size != other.size){
+            return lastTrue(this) > lastTrue(other);
+        }
+
+        else{
+      for (int i = size - 1; i >= 0; i--) {
+          boolean a = this.getEl(i);
+          boolean b = other.getEl(i);
+          if(a ^ b){
+              return a;
+          }
+      }
+        }
+        return false;
     }
 
     public boolean lt(BigInt other){
@@ -292,8 +349,8 @@ public class BigInt {
     }
 
     public boolean geot(BigInt other){
-        // no sign support yet
-        return lastTrue(this) >= lastTrue(other);
+        if(arr.equals(other.arr)) return true;
+        return gt(other);
     }
 
     public boolean leot(BigInt other){
@@ -301,9 +358,31 @@ public class BigInt {
         return !geot(other);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BigInt bigInt = (BigInt) o;
+        return sign == bigInt.sign &&
+                size == bigInt.size &&
+                Objects.equals(arr, bigInt.arr);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(arr, sign, size);
+    }
+
     public boolean eq(BigInt other){
         String res = sub(other).toString();
         return res.equals("0");
+    }
+
+    public BigInt inc(){
+        BigInt res = new BigInt(this);
+        BigInt one = new BigInt(1);
+        return res.add(one);
     }
 
 
