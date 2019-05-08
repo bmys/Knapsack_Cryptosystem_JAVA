@@ -166,5 +166,9 @@ public class Controller {
         }
 
         publicKeyText.setText(publicKey.toString());
+
+    System.out.println(Integer.toBinaryString('s'));
+        System.out.println(Integer.toBinaryString('1'));
+        System.out.println(Integer.toBinaryString('a'));
     }
 }

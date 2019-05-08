@@ -1,5 +1,6 @@
 package Knapsack;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -68,5 +69,27 @@ public class Knapsack {
 
     public static BigInt toPlain(BigInt cipher, BigInt n, BigInt m){
         return BigInt.mul(cipher, n).mod(m);
+    }
+
+    public static String toBinaryPlain(BigInt cipher, List<BigInt> privateKey){
+        BigInt zero = new BigInt(0);
+        String k = "";
+
+        StringBuilder stringBuilder = new StringBuilder();
+        List<BigInt> newKey = new LinkedList<>(privateKey);
+        Collections.reverse(newKey);
+
+        for(BigInt i: newKey){
+            if(cipher.eq(zero)) break;
+            if(cipher.geot(i)){
+                stringBuilder.append('1');
+                cipher = cipher.sub(i);
+            }
+            else{
+                stringBuilder.append('0');
+            }
+        }
+        stringBuilder.reverse();
+        return stringBuilder.toString();
     }
 }
