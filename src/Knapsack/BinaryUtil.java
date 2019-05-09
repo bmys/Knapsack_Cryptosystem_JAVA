@@ -44,7 +44,7 @@ public class BinaryUtil {
             }
         }
 
-        return bitSetBuilder.toString();
+        return bitSetBuilder.reverse().toString();
     }
 
     public static String convertBitsetToText(String input) {
