@@ -9,8 +9,13 @@ import Knapsack.BigInt;
 import Knapsack.BinaryUtil;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
+import static Knapsack.FileEncrypt.calculatePadding;
+import static Knapsack.FileEncrypt.decryptFile;
+import static Knapsack.FileEncrypt.encryptFile;
 import static Knapsack.Knapsack.createPublicKey;
 import static Knapsack.Knapsack.encryptString;
 import static Knapsack.Knapsack.generateSuperIncreasingSeq;
@@ -205,7 +210,7 @@ public class Controller {
         System.out.println("n: " + n);
         BigInt invMod = Knapsack.inverseMod(n, m);
 
-    System.out.println("Invmod: " + invMod);
+        System.out.println("Invmod: " + invMod);
 
         List<BigInt> result = Knapsack.decryptString(cipherBigInts, invMod, m);
         System.out.println(result);
@@ -223,5 +228,53 @@ public class Controller {
 
 
         plainTextArea.setText(BinaryUtil.binaryStringToUTF8(binaryResult));
+    }
+
+    private List<BigInt> getKeyVal(TextField keytext){
+        String privStr = keytext.getText();
+        privStr = privStr.replace("[", "");
+        privStr = privStr.replace("]", "");
+        privStr = privStr.replace(", ", " ");
+        privStr = privStr.trim();
+
+        List<String> cipherSplitted = new ArrayList<String>(Arrays.asList(privStr.split(" ")));
+        List<BigInt> cipherBigInts = new LinkedList<>();
+
+        for (String cipstr : cipherSplitted ) {
+            cipherBigInts.add(new BigInt(Long.parseLong(cipstr)));
+        }
+
+        return cipherBigInts;
+    }
+
+    public void cryptFile(Boolean encrypt){
+        try{
+            BigInt m = new BigInt(Long.parseLong(mText.getText()));
+            BigInt n = new BigInt(Long.parseLong(nText.getText()));
+            List<BigInt> prv = getKeyVal(privateKeyText);
+            List<BigInt> pub = getKeyVal(publicKeyText);
+            String path = fileNameLabel.getText();
+
+            if(encrypt){
+                String newPath = path + ".enc";
+                String res = encryptFile(path, pub);
+                BinaryUtil.writeBitsetToFile(newPath, res);
+            }
+            else{
+                String newPath = path + ".dec";
+                String res = decryptFile(path, privateKey, n, m, calculatePadding(publicKey));
+                BinaryUtil.writeBitsetToFile(newPath, res);
+            }
+        }
+
+        catch (NumberFormatException e){
+            System.out.println("Błędny parametr");
+            return;
+        }
+
+        catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            return;
+        }
     }
 }

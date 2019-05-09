@@ -75,7 +75,7 @@
             </HBox>
             <HBox prefHeight="21.0" prefWidth="394.0">
                <children>
-                  <Button fx:id="cryptFileButton" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Szyfruj plik">
+                  <Button fx:id="cryptFileButton" onAction="#cryptFile" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Szyfruj plik">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
