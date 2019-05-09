@@ -6,13 +6,15 @@ import javafx.stage.FileChooser;
 
 import Knapsack.Knapsack;
 import Knapsack.BigInt;
-
+import Knapsack.BinaryUtil;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
+import static Knapsack.Knapsack.createPublicKey;
+import static Knapsack.Knapsack.encryptString;
+import static Knapsack.Knapsack.generateSuperIncreasingSeq;
+
 
 public class Controller {
 
@@ -119,7 +121,7 @@ public class Controller {
             try{
                 int count = Integer.parseInt(result.get());
                 BigInt k = new BigInt(1);
-                this.privateKey = Knapsack.generateSuperIncreasingSeq(k, count);
+                this.privateKey = generateSuperIncreasingSeq(k, count);
                 privateKeyText.setText(privateKey.toString());
             }
             catch (NumberFormatException e){
@@ -152,7 +154,7 @@ public class Controller {
         try{
             BigInt m = new BigInt(Long.parseLong(mText.getText()));
             BigInt n = new BigInt(Long.parseLong(nText.getText()));
-            publicKey = Knapsack.createPublicKey(privateKey, n, m);
+            publicKey = createPublicKey(privateKey, n, m);
         }
 
         catch (NumberFormatException e){
@@ -170,5 +172,56 @@ public class Controller {
     System.out.println(Integer.toBinaryString('s'));
         System.out.println(Integer.toBinaryString('1'));
         System.out.println(Integer.toBinaryString('a'));
+    }
+
+    public void encryptText(){
+        String plainBinary = BinaryUtil.convertTextToBitset(plainTextArea.getText());
+        List<BigInt> ll = encryptString(plainBinary, publicKey);
+        cipherTextArea.setText(ll.toString());
+
+    }
+
+    public void decryptText(){
+        System.out.println("odszyfruj");
+        String cipherText = cipherTextArea.getText();
+        cipherText = cipherText.replace("[", "");
+        cipherText = cipherText.replace("]", "");
+        cipherText = cipherText.replace(", ", " ");
+        cipherText = cipherText.trim();
+
+        List<String> cipherSplitted = new ArrayList<String>(Arrays.asList(cipherText.split(" ")));
+        List<BigInt> cipherBigInts = new LinkedList<>();
+
+        for (String cipstr : cipherSplitted ) {
+            cipherBigInts.add(new BigInt(Long.parseLong(cipstr)));
+        }
+
+        System.out.println(cipherBigInts);
+
+        BigInt m = new BigInt(Long.parseLong(mText.getText()));
+        BigInt n = new BigInt(Long.parseLong(nText.getText()));
+
+        System.out.println("m: " + m);
+        System.out.println("n: " + n);
+        BigInt invMod = Knapsack.inverseMod(n, m);
+
+    System.out.println("Invmod: " + invMod);
+
+        List<BigInt> result = Knapsack.decryptString(cipherBigInts, invMod, m);
+        System.out.println(result);
+
+//
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (BigInt op : result) {
+            stringBuilder.append(Knapsack.toBinaryPlain(op, this.privateKey));
+            System.out.println(Knapsack.toBinaryPlain(op, this.privateKey));
+        }
+
+        String binaryResult = stringBuilder.toString();
+        System.out.println(binaryResult);
+
+
+        plainTextArea.setText(BinaryUtil.binaryStringToUTF8(binaryResult));
     }
 }

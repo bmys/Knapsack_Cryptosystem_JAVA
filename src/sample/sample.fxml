@@ -25,14 +25,14 @@
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
          <children>
             <Label text="Tekst jawny" />
-            <Button fx:id="encryptTextButton" mnemonicParsing="false" text="Szyfruj" />
+            <Button fx:id="encryptTextButton" onAction="#encryptText" mnemonicParsing="false" text="Szyfruj" />
             <TextArea fx:id="plainTextArea" prefHeight="156.0" prefWidth="394.0" />
          </children>
       </VBox>
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
             <Label text="Tekst zaszyfrowany" />
-            <Button fx:id="decryptTextButton" mnemonicParsing="false" text="Odszyfruj" />
+            <Button fx:id="decryptTextButton" onAction="#decryptText" mnemonicParsing="false" text="Odszyfruj" />
             <TextArea fx:id="cipherTextArea" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </VBox>
