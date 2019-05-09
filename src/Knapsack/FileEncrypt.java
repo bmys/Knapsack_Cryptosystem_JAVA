@@ -51,6 +51,11 @@ public class FileEncrypt {
             decrypted.add(Knapsack.toPlain(bi, invMod, m));
         }
 
+        BigInt zero = new BigInt(0);
+        if(decrypted.get(decrypted.size()-1).eq(zero)){
+            decrypted.remove(decrypted.size()-1);
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
 
         for (BigInt bi : decrypted) {
