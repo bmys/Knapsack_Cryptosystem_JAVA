@@ -1,5 +1,7 @@
 package Knapsack;
 
+import com.google.common.base.Splitter;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,8 +69,8 @@ public class Knapsack {
         return sum;
     }
 
-    public static BigInt toPlain(BigInt cipher, BigInt n, BigInt m){
-        return BigInt.mul(cipher, n).mod(m);
+    public static BigInt toPlain(BigInt cipher, BigInt inverseMod, BigInt m){
+        return BigInt.mul(cipher, inverseMod).mod(m);
     }
 
     public static String toBinaryPlain(BigInt cipher, List<BigInt> privateKey){
@@ -92,4 +94,43 @@ public class Knapsack {
         stringBuilder.reverse();
         return stringBuilder.toString();
     }
+
+    public static List<BigInt> encryptString(String str, List<BigInt> pubkey){
+        int keySize = pubkey.size();
+
+        List<BigInt> cipher = new LinkedList<>();
+
+        Iterable<String> chunks  = Splitter.fixedLength(keySize).split(str);
+
+        for(String chunk: chunks){
+            cipher.add(toCipher(chunk, pubkey));
+        }
+
+    return cipher;
+    }
+
+    public static String decryptString(List<BigInt> cipher, List<BigInt> privKey, BigInt inverseMod, BigInt m){
+        List<BigInt> binary = decryptString(cipher, inverseMod, m);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (BigInt bi : binary) {
+            stringBuilder.append(toBinaryPlain(bi, privKey));
+            stringBuilder.append("  ");
+        }
+
+
+    return stringBuilder.toString();
+    }
+
+    public static List<BigInt> decryptString(List<BigInt> cipher, BigInt inverseMod, BigInt m){
+        List<BigInt> result = new LinkedList<>();
+
+        for (BigInt bigInt : cipher) {
+            BigInt bi = toPlain(bigInt, inverseMod, m);
+            result.add(bi);
+        }
+
+        return result;
+    }
+
 }
