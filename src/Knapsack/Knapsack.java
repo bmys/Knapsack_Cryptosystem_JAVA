@@ -82,7 +82,7 @@ public class Knapsack {
         Collections.reverse(newKey);
 
         for(BigInt i: newKey){
-            if(cipher.eq(zero)) break;
+            //if(cipher.eq(zero)) break;
             if(cipher.geot(i)){
                 stringBuilder.append('1');
                 cipher = cipher.sub(i);
@@ -92,6 +92,10 @@ public class Knapsack {
             }
         }
         stringBuilder.reverse();
+//        int finish = cipher.getArr().size() - stringBuilder.length();
+//        for (int n = 0; n < finish; n++){
+//            stringBuilder.append('0');
+//        }
         return stringBuilder.toString();
     }
 
@@ -118,9 +122,8 @@ public class Knapsack {
             stringBuilder.append("  ");
         }
 
-
     return stringBuilder.toString();
-    }
+}
 
     public static List<BigInt> decryptString(List<BigInt> cipher, BigInt inverseMod, BigInt m){
         List<BigInt> result = new LinkedList<>();
@@ -132,5 +135,4 @@ public class Knapsack {
 
         return result;
     }
-
 }
