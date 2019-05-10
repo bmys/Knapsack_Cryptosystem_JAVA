@@ -75,7 +75,7 @@
             </HBox>
             <HBox prefHeight="21.0" prefWidth="394.0">
                <children>
-                  <Button fx:id="cryptFileButton" onAction="#cryptFile" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Szyfruj plik">
+                  <Button fx:id="cryptFileButton" onAction="#encryptFileAction" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Szyfruj plik">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
@@ -89,7 +89,7 @@
             </HBox>
             <HBox layoutX="10.0" layoutY="10.0" prefHeight="12.0" prefWidth="295.0">
                <children>
-                  <Button fx:id="decryptFileButton" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Odszyfruj plik" />
+                  <Button fx:id="decryptFileButton" onAction="#decryptFileAction" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Odszyfruj plik" />
                   <TextField fx:id="decryptNameLabel" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="252.0" text="Nowa nazwa">
                      <HBox.margin>
                         <Insets left="5.0" />

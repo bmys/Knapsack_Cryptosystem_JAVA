@@ -64,7 +64,8 @@ public class TestFileEncrypt {
 
       String h = encryptFile("/home/arch/IdeaProjects/knapsack/test/test.txt", publicKey);
       System.out.println("Encrypted: " + h);
-    BinaryUtil.writeBitsetToFile("/home/arch/IdeaProjects/knapsack/test/test.enc", h);
+      BinaryUtil.writeBitsetToFile("/home/arch/IdeaProjects/knapsack/test/test.enc", h);
+
       String s = decryptFile("/home/arch/IdeaProjects/knapsack/test/test.enc", privKey, n, m, calculatePadding(publicKey));
       System.out.println("Decrypted: " + s);
       BinaryUtil.writeBitsetToFile("/home/arch/IdeaProjects/knapsack/test/test.dec", new StringBuilder(s).reverse().toString());

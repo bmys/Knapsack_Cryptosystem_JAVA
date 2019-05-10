@@ -247,6 +247,14 @@ public class Controller {
         return cipherBigInts;
     }
 
+    public void encryptFileAction(){
+        cryptFile(true);
+    }
+
+    public void decryptFileAction(){
+        cryptFile(false);
+    }
+
     public void cryptFile(Boolean encrypt){
         try{
             BigInt m = new BigInt(Long.parseLong(mText.getText()));
@@ -262,8 +270,9 @@ public class Controller {
             }
             else{
                 String newPath = path + ".dec";
-                String res = decryptFile(path, privateKey, n, m, calculatePadding(publicKey));
-                BinaryUtil.writeBitsetToFile(newPath, res);
+                String res = decryptFile(path, prv, n, m, calculatePadding(pub));
+                String reversed = new StringBuilder(res).reverse().toString();
+                BinaryUtil.writeBitsetToFile(newPath, reversed);
             }
         }
 
