@@ -1,24 +1,17 @@
 package sample;
 
+import Knapsack.BigInt;
+import Knapsack.BinaryUtil;
+import Knapsack.Knapsack;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
-import Knapsack.Knapsack;
-import Knapsack.BigInt;
-import Knapsack.BinaryUtil;
-
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
-import static Knapsack.FileEncrypt.calculatePadding;
-import static Knapsack.FileEncrypt.decryptFile;
-import static Knapsack.FileEncrypt.encryptFile;
-import static Knapsack.Knapsack.createPublicKey;
-import static Knapsack.Knapsack.encryptString;
-import static Knapsack.Knapsack.generateSuperIncreasingSeq;
+import static Knapsack.FileEncrypt.*;
+import static Knapsack.Knapsack.*;
 
 
 public class Controller {
@@ -166,6 +159,7 @@ public class Controller {
             System.out.println("Błędny parametr M lub N");
             return;
         }
+
 
         catch (IllegalArgumentException e){
             System.out.println(e.getMessage());

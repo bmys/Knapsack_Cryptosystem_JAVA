@@ -1,12 +1,11 @@
 import Knapsack.BigInt;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TestBigInt {
 
