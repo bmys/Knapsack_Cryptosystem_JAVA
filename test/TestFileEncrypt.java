@@ -1,15 +1,13 @@
 import Knapsack.BigInt;
 import Knapsack.BinaryUtil;
 import Knapsack.Knapsack;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static Knapsack.FileEncrypt.calculatePadding;
-import static Knapsack.FileEncrypt.decryptFile;
-import static Knapsack.FileEncrypt.encryptFile;
+import static Knapsack.FileEncrypt.*;
 
 public class TestFileEncrypt {
     List<BigInt> privKey = new LinkedList<>(Arrays.asList(

@@ -34,6 +34,10 @@ public class Knapsack {
             throw new IllegalArgumentException("m value should be greater than sum of private key");
         }
 
+        if (areCoprimes(n, m)) {
+            throw new IllegalArgumentException("n and m have to be coprimes!");
+        }
+
         for (BigInt pk : privateKey) {
             BigInt newValue = BigInt.mul(pk, n).mod(m);
             sequence.add(newValue);
@@ -134,5 +138,13 @@ public class Knapsack {
         }
 
         return result;
+    }
+
+    public static boolean areCoprimes(BigInt a, BigInt b) {
+        // need to clone due to mutability
+        BigInt f = (BigInt) a.clone();
+        BigInt s = (BigInt) b.clone();
+
+        return !f.eq(s) && BigInt.gcd(f, s).eq(new BigInt(1));
     }
 }

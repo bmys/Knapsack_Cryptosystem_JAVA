@@ -5,10 +5,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-public class BigInt {
+public class BigInt implements Cloneable {
   private List<Boolean> arr = new LinkedList<>();
   private boolean sign = false;
   private int size = 0;
+
+  protected Object clone() {
+      BigInt copy = new BigInt(this);
+      copy.arr = new LinkedList<>(this.arr);
+      copy.sign = this.sign;
+      copy.size = this.size;
+
+      return copy;
+  }
 
   public BigInt(long number) {
     if (number < 0) {
@@ -426,6 +435,17 @@ public class BigInt {
       } else {
           arr.set(i, value);
       }
+    }
+
+    public static BigInt gcd(BigInt a, BigInt b) {
+      BigInt bigZero = new BigInt(0);
+
+        while (!b.eq(bigZero)) {
+            BigInt tmp = b;
+            b = a.mod(b);
+            a = tmp;
+        }
+        return a;
     }
 
   @Override
