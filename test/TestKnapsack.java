@@ -66,5 +66,35 @@ public class TestKnapsack {
         assertEquals("27", plain.toString());
     }
 
+//    @Test
+//    public void testToPlain2(){
+//        List<BigInt> privKey = Knapsack.generateSuperIncreasingSeq(new BigInt(0), 8);
+//        BigInt m = new BigInt(75231);
+//        BigInt n = new BigInt(2563);
+//        List<BigInt> publicKey = Knapsack.createPublicKey(privKey, n, m);
+//
+//        BigInt invMod = Knapsack.inverseMod(n, m);
+//
+//
+//        BigInt cipher = Knapsack.toCipher("111010", publicKey);
+//        BigInt plain = Knapsack.toPlain(cipher, invMod, m);
+//        assertEquals(Knapsack.toBinaryPlain(plain, privKey), "111010");
+//    }
 
+    @Test
+    public void testToPlain2(){
+        List<BigInt> privKey = Knapsack.generateSuperIncreasingSeq(new BigInt(0), 5);
+    System.out.println("privkey: " + privKey);
+        BigInt m = new BigInt(9536);
+        BigInt n = new BigInt(126);
+        List<BigInt> publicKey = Knapsack.createPublicKey(privKey, n, m);
+
+        BigInt invMod = Knapsack.inverseMod(n, m);
+        System.out.println(invMod);
+
+        BigInt cipher = Knapsack.toCipher("111010", publicKey);
+        BigInt plain = Knapsack.toPlain(cipher, invMod, m);
+        System.out.println(plain);
+        assertEquals(Knapsack.toBinaryPlain(plain, privKey), "111010");
+    }
 }

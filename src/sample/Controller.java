@@ -181,7 +181,10 @@ public class Controller {
 
     public void encryptText(){
         String plainBinary = BinaryUtil.convertTextToBitset(plainTextArea.getText());
-        List<BigInt> ll = encryptString(plainBinary, publicKey);
+        StringBuilder stringBuilder = new StringBuilder(plainBinary);
+        List<BigInt> ll = encryptString(stringBuilder.reverse().toString(), publicKey);
+//        System.out.println("plain bin: " + plainBinary);
+//        System.out.println("encrypted: " + ll);
         cipherTextArea.setText(ll.toString());
 
     }
