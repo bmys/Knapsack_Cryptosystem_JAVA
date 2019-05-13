@@ -13,274 +13,236 @@ import java.util.*;
 import static Knapsack.FileEncrypt.*;
 import static Knapsack.Knapsack.*;
 
-
 public class Controller {
 
-    private List<BigInt> privateKey;
-    private List<BigInt> publicKey;
+  private List<BigInt> privateKey;
+  private List<BigInt> publicKey;
 
-    private FileChooser fileChooser = new FileChooser();
+  private FileChooser fileChooser = new FileChooser();
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        fileChooser.setTitle("Wybierz plik");
+  @Override
+  protected void finalize() throws Throwable {
+    super.finalize();
+    fileChooser.setTitle("Wybierz plik");
+  }
+
+  private List<BigInt> createListFromString(String str) {
+    str = str.replace("[", "");
+    str = str.replace("]", "");
+    List<String> numbers = Arrays.asList(str.split("\\s*,\\s*"));
+    List<BigInt> result = new LinkedList<>();
+
+    for (String num : numbers) {
+      try {
+        long bigInt = Long.parseLong(num);
+        result.add(new BigInt(bigInt));
+      } catch (NumberFormatException e) {
+        System.out.println("Niepoprawna liczba");
+        return null;
+      }
+    }
+    return result;
+  }
+
+  @FXML private Button decryptTextButton;
+
+  @FXML private Label fileNameLabel;
+
+  @FXML private TextField mText;
+
+  @FXML private TextField nText;
+
+  @FXML private TextField decryptNameLabel;
+
+  @FXML private Button generatePrivateButton;
+
+  @FXML private TextField cryptNameLabel;
+
+  @FXML private Button chooseFileButton;
+
+  @FXML private TextField publicKeyText;
+
+  @FXML private TextArea cipherTextArea;
+
+  @FXML private Button encryptTextButton;
+
+  @FXML private Button generatePublicButton;
+
+  @FXML private Button decryptFileButton;
+
+  @FXML private TextArea plainTextArea;
+
+  @FXML private TextField privateKeyText;
+
+  @FXML private Button cryptFileButton;
+
+  public void chooseFile() {
+
+    File file = fileChooser.showOpenDialog(null);
+    if (file != null) {
+      fileNameLabel.setText(file.getPath());
+      cryptNameLabel.setText(file.getName() + ".enc");
+      decryptNameLabel.setText(file.getName() + ".dec");
+    }
+  }
+
+  public void generatePrivate() {
+    TextInputDialog dialog = new TextInputDialog("5");
+    dialog.setTitle("Podaj ilość elementów klucza");
+    dialog.setHeaderText("Podaj:");
+    dialog.setContentText("Ile");
+
+    Optional<String> result = dialog.showAndWait();
+
+    if (result.isPresent()) {
+
+      try {
+        int count = Integer.parseInt(result.get());
+        BigInt k = new BigInt(1);
+        this.privateKey = generateSuperIncreasingSeq(k, count);
+        privateKeyText.setText(privateKey.toString());
+      } catch (NumberFormatException e) {
+        System.out.println("Niepoprawna liczba");
+      }
+    }
+  }
+
+  public void generatePublic() {
+    if (mText.getText().trim().isEmpty()) {
+      System.out.println("Brak parametru M");
+      return;
     }
 
-    private List<BigInt> createListFromString(String str){
-        str = str.replace("[", "");
-        str = str.replace("]", "");
-        List<String> numbers = Arrays.asList(str.split("\\s*,\\s*"));
-        List<BigInt> result = new LinkedList<>();
-
-        for (String num : numbers ) {
-            try{
-                long bigInt = Long.parseLong(num);
-                result.add(new BigInt(bigInt));
-            }
-            catch (NumberFormatException e){
-                System.out.println("Niepoprawna liczba");
-                return null;
-            }
-        }
-        return result;
+    if (nText.getText().trim().isEmpty()) {
+      System.out.println("Brak parametru N");
+      return;
     }
 
-    @FXML
-    private Button decryptTextButton;
-
-    @FXML
-    private Label fileNameLabel;
-
-    @FXML
-    private TextField mText;
-
-    @FXML
-    private TextField nText;
-
-    @FXML
-    private TextField decryptNameLabel;
-
-    @FXML
-    private Button generatePrivateButton;
-
-    @FXML
-    private TextField cryptNameLabel;
-
-    @FXML
-    private Button chooseFileButton;
-
-    @FXML
-    private TextField publicKeyText;
-
-    @FXML
-    private TextArea cipherTextArea;
-
-    @FXML
-    private Button encryptTextButton;
-
-    @FXML
-    private Button generatePublicButton;
-
-    @FXML
-    private Button decryptFileButton;
-
-    @FXML
-    private TextArea plainTextArea;
-
-    @FXML
-    private TextField privateKeyText;
-
-    @FXML
-    private Button cryptFileButton;
-
-    public void chooseFile(){
-
-        File file = fileChooser.showOpenDialog(null);
-        if (file != null) {
-            fileNameLabel.setText(file.getPath());
-            cryptNameLabel.setText(file.getName() + ".enc");
-            decryptNameLabel.setText(file.getName() + ".dec");
-        }
-        //if(fileChooser.ge)
+    if (privateKeyText.getText().trim().isEmpty()) {
+      System.out.println("Klucz prywatny pusty");
+      return;
     }
 
-    public void generatePrivate(){
-        TextInputDialog dialog = new TextInputDialog("15");
-        dialog.setTitle("Podaj ilość elementów klucza");
-        dialog.setHeaderText("Podaj:");
-        dialog.setContentText("Ile");
+    if (createListFromString(privateKeyText.getText()) == null) {
+      return;
+    }
+    privateKey = createListFromString(privateKeyText.getText());
 
-        // Traditional way to get the response value.
-        Optional<String> result = dialog.showAndWait();
-
-        if (result.isPresent()){
-
-            try{
-                int count = Integer.parseInt(result.get());
-                BigInt k = new BigInt(1);
-                this.privateKey = generateSuperIncreasingSeq(k, count);
-                privateKeyText.setText(privateKey.toString());
-            }
-            catch (NumberFormatException e){
-                System.out.println("Niepoprawna liczba");
-            }
-        }
+    try {
+      BigInt m = new BigInt(Long.parseLong(mText.getText()));
+      BigInt n = new BigInt(Long.parseLong(nText.getText()));
+      publicKey = createPublicKey(privateKey, n, m);
+    } catch (NumberFormatException e) {
+      System.out.println("Błędny parametr M lub N");
+      return;
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
+      return;
     }
 
-    public void generatePublic(){
-        if(mText.getText().trim().isEmpty()){
-            System.out.println("Brak parametru M");
-            return;
-        }
+    publicKeyText.setText(publicKey.toString());
+  }
 
-        if(nText.getText().trim().isEmpty()){
-            System.out.println("Brak parametru N");
-            return;
-        }
+  public void encryptText() {
+    String plainBinary = BinaryUtil.convertTextToBitset(plainTextArea.getText());
+    StringBuilder stringBuilder = new StringBuilder(plainBinary);
+    List<BigInt> ll = encryptString(stringBuilder.reverse().toString(), publicKey);
+    //        System.out.println("plain bin: " + plainBinary);
+    //        System.out.println("encrypted: " + ll);
+    cipherTextArea.setText(ll.toString());
+  }
 
-        if(privateKeyText.getText().trim().isEmpty()){
-            System.out.println("Klucz prywatny pusty");
-            return;
-        }
+  public void decryptText() {
+    System.out.println("odszyfruj");
+    String cipherText = cipherTextArea.getText();
+    cipherText = cipherText.replace("[", "");
+    cipherText = cipherText.replace("]", "");
+    cipherText = cipherText.replace(", ", " ");
+    cipherText = cipherText.trim();
 
-        if(createListFromString(privateKeyText.getText()) == null){
-            return;
-        }
-        privateKey = createListFromString(privateKeyText.getText());
+    List<String> cipherSplitted = new ArrayList<String>(Arrays.asList(cipherText.split(" ")));
+    List<BigInt> cipherBigInts = new LinkedList<>();
 
-        try{
-            BigInt m = new BigInt(Long.parseLong(mText.getText()));
-            BigInt n = new BigInt(Long.parseLong(nText.getText()));
-            publicKey = createPublicKey(privateKey, n, m);
-        }
-
-        catch (NumberFormatException e){
-            System.out.println("Błędny parametr M lub N");
-            return;
-        }
-
-
-        catch (IllegalArgumentException e){
-            System.out.println(e.getMessage());
-            return;
-        }
-
-        publicKeyText.setText(publicKey.toString());
-
-    System.out.println(Integer.toBinaryString('s'));
-        System.out.println(Integer.toBinaryString('1'));
-        System.out.println(Integer.toBinaryString('a'));
+    for (String cipstr : cipherSplitted) {
+      cipherBigInts.add(new BigInt(Long.parseLong(cipstr)));
     }
 
-    public void encryptText(){
-        String plainBinary = BinaryUtil.convertTextToBitset(plainTextArea.getText());
-        StringBuilder stringBuilder = new StringBuilder(plainBinary);
-        List<BigInt> ll = encryptString(stringBuilder.reverse().toString(), publicKey);
-//        System.out.println("plain bin: " + plainBinary);
-//        System.out.println("encrypted: " + ll);
-        cipherTextArea.setText(ll.toString());
+    System.out.println(cipherBigInts);
 
+    BigInt m = new BigInt(Long.parseLong(mText.getText()));
+    BigInt n = new BigInt(Long.parseLong(nText.getText()));
+
+    System.out.println("m: " + m);
+    System.out.println("n: " + n);
+    BigInt invMod = Knapsack.inverseMod(n, m);
+
+    System.out.println("Invmod: " + invMod);
+
+    List<BigInt> result = Knapsack.decryptString(cipherBigInts, invMod, m);
+    System.out.println(result);
+
+    StringBuilder stringBuilder = new StringBuilder();
+
+    for (BigInt op : result) {
+      stringBuilder.append(Knapsack.toBinaryPlain(op, this.privateKey));
+      System.out.println(Knapsack.toBinaryPlain(op, this.privateKey));
     }
 
-    public void decryptText(){
-        System.out.println("odszyfruj");
-        String cipherText = cipherTextArea.getText();
-        cipherText = cipherText.replace("[", "");
-        cipherText = cipherText.replace("]", "");
-        cipherText = cipherText.replace(", ", " ");
-        cipherText = cipherText.trim();
+    String binaryResult = stringBuilder.toString();
+    System.out.println(binaryResult);
 
-        List<String> cipherSplitted = new ArrayList<String>(Arrays.asList(cipherText.split(" ")));
-        List<BigInt> cipherBigInts = new LinkedList<>();
+    plainTextArea.setText(BinaryUtil.binaryStringToUTF8(binaryResult));
+  }
 
-        for (String cipstr : cipherSplitted ) {
-            cipherBigInts.add(new BigInt(Long.parseLong(cipstr)));
-        }
+  private List<BigInt> getKeyVal(TextField keytext) {
+    String privStr = keytext.getText();
+    privStr = privStr.replace("[", "");
+    privStr = privStr.replace("]", "");
+    privStr = privStr.replace(", ", " ");
+    privStr = privStr.trim();
 
-        System.out.println(cipherBigInts);
+    List<String> cipherSplitted = new ArrayList<String>(Arrays.asList(privStr.split(" ")));
+    List<BigInt> cipherBigInts = new LinkedList<>();
 
-        BigInt m = new BigInt(Long.parseLong(mText.getText()));
-        BigInt n = new BigInt(Long.parseLong(nText.getText()));
-
-        System.out.println("m: " + m);
-        System.out.println("n: " + n);
-        BigInt invMod = Knapsack.inverseMod(n, m);
-
-        System.out.println("Invmod: " + invMod);
-
-        List<BigInt> result = Knapsack.decryptString(cipherBigInts, invMod, m);
-        System.out.println(result);
-
-//
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for (BigInt op : result) {
-            stringBuilder.append(Knapsack.toBinaryPlain(op, this.privateKey));
-            System.out.println(Knapsack.toBinaryPlain(op, this.privateKey));
-        }
-
-        String binaryResult = stringBuilder.toString();
-        System.out.println(binaryResult);
-
-
-        plainTextArea.setText(BinaryUtil.binaryStringToUTF8(binaryResult));
+    for (String cipstr : cipherSplitted) {
+      cipherBigInts.add(new BigInt(Long.parseLong(cipstr)));
     }
 
-    private List<BigInt> getKeyVal(TextField keytext){
-        String privStr = keytext.getText();
-        privStr = privStr.replace("[", "");
-        privStr = privStr.replace("]", "");
-        privStr = privStr.replace(", ", " ");
-        privStr = privStr.trim();
+    return cipherBigInts;
+  }
 
-        List<String> cipherSplitted = new ArrayList<String>(Arrays.asList(privStr.split(" ")));
-        List<BigInt> cipherBigInts = new LinkedList<>();
+  public void encryptFileAction() {
+    cryptFile(true);
+  }
 
-        for (String cipstr : cipherSplitted ) {
-            cipherBigInts.add(new BigInt(Long.parseLong(cipstr)));
-        }
+  public void decryptFileAction() {
+    cryptFile(false);
+  }
 
-        return cipherBigInts;
+  public void cryptFile(Boolean encrypt) {
+    try {
+      BigInt m = new BigInt(Long.parseLong(mText.getText()));
+      BigInt n = new BigInt(Long.parseLong(nText.getText()));
+      List<BigInt> prv = getKeyVal(privateKeyText);
+      List<BigInt> pub = getKeyVal(publicKeyText);
+      String path = fileNameLabel.getText();
+
+      if (encrypt) {
+        String newPath = path + ".enc";
+        String res = encryptFile(path, pub);
+        BinaryUtil.writeBitsetToFile(newPath, res);
+      } else {
+        String newPath = path + ".dec";
+        String res = decryptFile(path, prv, n, m, calculatePadding(pub));
+        String reversed = new StringBuilder(res).reverse().toString();
+        BinaryUtil.writeBitsetToFile(newPath, reversed);
+      }
+    } catch (NumberFormatException e) {
+      System.out.println("Błędny parametr");
+      return;
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
+      return;
     }
-
-    public void encryptFileAction(){
-        cryptFile(true);
-    }
-
-    public void decryptFileAction(){
-        cryptFile(false);
-    }
-
-    public void cryptFile(Boolean encrypt){
-        try{
-            BigInt m = new BigInt(Long.parseLong(mText.getText()));
-            BigInt n = new BigInt(Long.parseLong(nText.getText()));
-            List<BigInt> prv = getKeyVal(privateKeyText);
-            List<BigInt> pub = getKeyVal(publicKeyText);
-            String path = fileNameLabel.getText();
-
-            if(encrypt){
-                String newPath = path + ".enc";
-                String res = encryptFile(path, pub);
-                BinaryUtil.writeBitsetToFile(newPath, res);
-            }
-            else{
-                String newPath = path + ".dec";
-                String res = decryptFile(path, prv, n, m, calculatePadding(pub));
-                String reversed = new StringBuilder(res).reverse().toString();
-                BinaryUtil.writeBitsetToFile(newPath, reversed);
-            }
-        }
-
-        catch (NumberFormatException e){
-            System.out.println("Błędny parametr");
-            return;
-        }
-
-        catch (IllegalArgumentException e){
-            System.out.println(e.getMessage());
-            return;
-        }
-    }
+  }
 }
